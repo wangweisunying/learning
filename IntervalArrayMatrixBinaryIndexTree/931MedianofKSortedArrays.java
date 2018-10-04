@@ -4,6 +4,133 @@
 
 // Example
 // Given nums = [[1],[2],[3]], return 2.00.
+// 经典二分法
+
+
+
+
+
+
+
+
+public class Solution {
+    /**
+     * @param nums: the given k sorted arrays
+     * @return: the median of the given k sorted arrays
+     */
+    public double findMedian(int[][] nums) {
+        int sum = 0;
+        ArrayList<Integer> list = new ArrayList();
+        for(int i = 0 ; i < nums.length ; i++){
+            for(int j = 0 ; j < nums[i].length ; j ++){
+                list.add(nums[i][j]);
+                sum += 1;
+            }
+        }
+
+        if(sum % 2 == 1){
+            findK(list , 0 , list.size() - 1 , list.size() / 2);
+        }
+        int m1 = findK(list , 0 , list.size() - 1 , list.size() / 2);
+        int m2 = findK(list , 0 , list.size() - 1 , (list.size() - 1) / 2);
+        
+
+
+        return (double)(Long.valueOf(m1) +  long.valueOf(m2))/2;
+        
+    }
+    private int findK(ArrayList<Integer> list , int s , int e , int k){
+        if(s >= e){
+            return list.get(k);
+        }
+        int l = s , r = e , pivot = list.get((l + r) / 2);
+        while(l <= r){
+            while(l <= r && list.get(l) < pivot){
+                l++;
+            }
+            while(l <= r && list.get(r)> pivot){
+                r--;
+            }
+            if(l <= r){
+                int tmp = list.get(l);
+                list.set(l , list.get(r));
+                list.set(r , tmp);
+                l++;
+                r--;
+            }
+
+        }
+        if(k <= r){
+            return findK(list , s , r , k);
+        }
+        if(k >= l){
+            return findK(list , l , e , k);
+        }
+        return list.get(k);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public class Solution {
+    /**
+     * @param nums: the given k sorted arrays
+     * @return: the median of the given k sorted arrays
+     */
+    public double findMedian(int[][] nums) {
+        if (nums == null || nums.length == 0) {
+             return 0;
+        }
+        // write your code here
+        int n = 0;
+        for (int i = 0; i < nums.length; i++) {
+            n += nums[i].length;
+        }
+        if (n == 0) {
+            return 0;
+        }
+        // System.out.println(n);
+        int[] allNums = new int[n];
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < nums[i].length; j++) {
+                allNums[count++] = nums[i][j];
+            }
+        }
+        Arrays.sort(allNums);
+        return n % 2 == 0 ? ((double) allNums[n/2 - 1] + (double) allNums[n/2])/ (double)2 : allNums[n/2];
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 public class Solution {

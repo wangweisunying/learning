@@ -10,6 +10,65 @@
 // update(1, 2)
 // sumRange(0, 2) -> 8
 
+
+class NumArray {
+    int[] preSum;
+    int[] nums;
+    public NumArray(int[] nums) {
+        this.nums = nums;
+        preSum = new int[nums.length + 1];
+        for(int i = 1 ; i < preSum.length ; i++){
+            preSum[i] = preSum[i - 1] + nums[i - 1];
+        }    
+    }
+    
+    public void update(int i, int val) {
+        int dif = val - nums[i];
+        nums[i] = val; // dont forget to update val
+        for( ; i < preSum.length - 1 ; i++){
+            preSum[i + 1] += dif;
+        }
+    }
+    
+    public int sumRange(int i, int j) {
+        return preSum[j + 1] - preSum[i];
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class NumArray {
     int[] nums;
     public NumArray(int[] nums) {
