@@ -32,6 +32,145 @@
  *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
  * };
  */
+/**
+ * Definition for undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+ * };
+ */
+
+public class Solution {
+    /*
+     * @param node: A undirected graph node
+     * @return: A undirected graph node
+     */
+// 从1个点找到所有点 //hashset dfs or bfs
+// 复制所有的点 // hashmap store relation map old -> new
+// 复制所有的边 //use hashmap quick find the relation ship
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if(node == null){
+            return null;
+        }
+        //find all nodes
+        HashSet<UndirectedGraphNode> nodes_set = new HashSet();
+        dfs(node , nodes_set);
+        
+        // while(!que.isEmpty()){
+        //     UndirectedGraphNode node_unit = que.poll();
+        //     for(UndirectedGraphNode neighbor : node_unit.neighbors){
+        //         if(!nodes_set.contains(neighbor)){
+        //             nodes_set.add(neighbor);
+        //             que.offer(neighbor);   
+        //         }
+        //     }
+        // }
+
+        //copy all the nodes using hashmap for connection use
+        HashMap<UndirectedGraphNode , UndirectedGraphNode> linkMap = new HashMap();
+        for(UndirectedGraphNode node_unit : nodes_set){
+            linkMap.put(node_unit , new UndirectedGraphNode(node_unit.label));
+        }
+        
+        //connect all the nodes
+        for(UndirectedGraphNode node_unit : nodes_set){
+            for(UndirectedGraphNode neighbor : node_unit.neighbors){
+                linkMap.get(node_unit).neighbors.add(linkMap.get(neighbor));
+            } 
+        }
+        return linkMap.get(node);
+    }
+    private void dfs(UndirectedGraphNode node , HashSet<UndirectedGraphNode> nodes_set){
+        nodes_set.add(node);
+        for(UndirectedGraphNode neighbor : node.neighbors){
+            if(nodes_set.contains(neighbor)){
+                continue;
+            }
+            dfs(neighbor , nodes_set);
+        }
+    }
+}
+
+
+
+
+public class Solution {
+    /*
+     * @param node: A undirected graph node
+     * @return: A undirected graph node
+     */
+// 从1个点找到所有点 //hashset
+// 复制所有的点 // hashmap store relation map old -> new
+// 复制所有的边 //use hashmap quick find the relation ship
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if(node == null){
+            return null;
+        }
+        //find all nodes
+        Queue<UndirectedGraphNode> que = new LinkedList();
+        HashSet<UndirectedGraphNode> nodes_set = new HashSet();
+        que.offer(node);
+        nodes_set.add(node);
+        while(!que.isEmpty()){
+            UndirectedGraphNode node_unit = que.poll();
+            for(UndirectedGraphNode neighbor : node_unit.neighbors){
+                if(!nodes_set.contains(neighbor)){
+                    nodes_set.add(neighbor);
+                    que.offer(neighbor);   
+                }
+            }
+        }
+
+        //copy all the nodes using hashmap for connection use
+        HashMap<UndirectedGraphNode , UndirectedGraphNode> linkMap = new HashMap();
+        for(UndirectedGraphNode node_unit : nodes_set){
+            linkMap.put(node_unit , new UndirectedGraphNode(node_unit.label));
+        }
+        
+        //connect all the nodes
+        for(UndirectedGraphNode node_unit : nodes_set){
+            for(UndirectedGraphNode neighbor : node_unit.neighbors){
+                linkMap.get(node_unit).neighbors.add(linkMap.get(neighbor));
+            } 
+        }
+        return linkMap.get(node);
+
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 public class Solution {
