@@ -13,7 +13,7 @@
 //     /  \                / \
 //    15   7              15  7
 // The binary tree A is a height-balanced binary tree, but B is not.
-
+// a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 /**
  * Definition of TreeNode:
  * public class TreeNode {
@@ -25,11 +25,72 @@
  *     }
  * }
  */
-{1,2,3,4,#,5,6,7,8,9,10,11,12}
-Output
-true
-Expected
-false
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root == null){
+            return true;
+        }
+        int left = helper(root.left) + 1;
+        int right = helper(root.right) + 1;
+        
+        return Math.abs(left - right) <= 1 && isBalanced(root.left) && isBalanced(root.right);
+    }
+    private int helper(root){
+        if(root == null){
+            return 0;
+        }
+        return Math.max(helper(root.left) ,helper(root.right)) + 1;
+    }
+}
+
+
+public class Solution {
+private boolean result = true;
+
+public boolean isBalanced(TreeNode root) {
+    maxDepth(root);
+    return result;
+}
+
+public int maxDepth(TreeNode root) {
+    if (root == null)
+        return 0;
+    int l = maxDepth(root.left);
+    int r = maxDepth(root.right);
+    if (Math.abs(l - r) > 1)
+        result = false;
+    return 1 + Math.max(l, r);
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

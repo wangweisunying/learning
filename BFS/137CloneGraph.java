@@ -185,7 +185,7 @@ public class Solution {
         if(node == null){
             return node;
         }
-        HashSet<UndirectedGraphNode> set = new HashSet();
+        HashSet<UndirectedGraphNode> set = new HashSet(); 
         Queue<UndirectedGraphNode> que = new LinkedList();
         que.offer(node);
         set.add(node);

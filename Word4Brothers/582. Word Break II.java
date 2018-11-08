@@ -10,6 +10,75 @@
 
 // A solution is ["lint code", "lint co de"].
 
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Map<String , List<String>> memo = new HashMap();
+        return dfs(s , wordDict , memo);
+    }
+    private List<String> dfs(String s , List<String> wordDict , Map<String , List<String>> memo){
+        List<String> list = new ArrayList();
+        // if(s.length() == 0){
+        //     return list;
+        // }
+        if(memo.containsKey(s)){
+            return memo.get(s);
+        }
+        if(wordDict.contains(s)){
+            list.add(s);
+        }
+        String curString = "";
+        for(int i = 1 ; i <= s.length() ; i++){
+            String substring  = s.substring(0 , i);
+            if(wordDict.contains(substring)){
+                curString = substring;
+                // if(i == s.length()){ 
+                //     list.add(curString);
+                // }
+                List<String> restWordList = dfs(s.substring(i) , wordDict , memo);
+         
+                for(String restWord : restWordList){
+                    list.add(curString + " " + restWord);
+                }
+            }
+        }
+        memo.put(s , list);
+        return list;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public class Solution {
     /*

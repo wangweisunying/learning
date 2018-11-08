@@ -34,6 +34,48 @@
  *     }
  * }
  */
+class Solution {
+    public void flatten(TreeNode root) {
+        if(root == null){
+            return;
+        }
+        helper(root);
+    }
+    private TreeNode helper(TreeNode root){
+        if(root == null){
+            return null;
+        }
+        TreeNode left = helper(root.left);
+        TreeNode right = helper(root.right);
+        if(left != null){
+            root.left = null;
+            root.right = left;
+            while(left.right != null){
+                left = left.right;
+            }
+            left.right = right;
+        }
+        return root;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public class Solution {
     /**

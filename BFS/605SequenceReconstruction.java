@@ -21,8 +21,6 @@
 
 // Given org = [4,1,5,2,6,3], seqs = [[5,2,6,3],[4,1,5,2]]
 // Return true
-[5,3,2,4,1]
-[[5,3,2,4],[4,1],[1],[3],[2,4], [1000000000]]
 public class Solution {
     /**
      * @param org: a permutation of the integers from 1 to n
@@ -73,7 +71,6 @@ public class Solution {
         while(!que.isEmpty()){
             int size = que.size();
             if(size > 1){
-                System.out.println("size");
                 return false;
             }
             int cur = que.poll();

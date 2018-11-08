@@ -24,7 +24,7 @@ public int longestConsecutive(int[] nums) {
             
             res = Math.max(res , curMaxLen);
 
-            //只需要最外面的点是最新的值 each loop will only find the boundary point
+            //只需要最外侧的点是最新的值 each loop will only find the boundary point
             map.put(num , curMaxLen);
             map.put(num - left ,curMaxLen);
             map.put(nums + right , curMaxLen);

@@ -14,6 +14,69 @@ public class Solution {
      * @return: Maximum profit
      */
     public int maxProfit(int[] prices) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        
+        int[] f = new int[prices.length]; //represent the max value got at day i;
+        f[0] = 0;
+        for(int i = 1; i < prices.length ; i++){
+            f[i] = f[i - 1] + (prices[i] - prices[i - 1] > 0 ? prices[i] - prices[i - 1] : 0);
+        }
+        return f[prices.length - 1];
+    }
+}
+
+public class Solution {
+    /**
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    public int maxProfit(int[] prices) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        
+        int curMax = 0; //represent the max value got at day i;
+  
+        for(int i = 1; i < prices.length ; i++){
+            curMax = curMax + (prices[i] - prices[i - 1] > 0 ? prices[i] - prices[i - 1] : 0);
+        }
+        return curMax;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public class Solution {
+    /**
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    public int maxProfit(int[] prices) {
         int sum  = 0;
         for(int i  = 1 ; i < prices.length ; i ++){
             if(prices[i - 1] < prices[i]){

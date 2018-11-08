@@ -35,6 +35,88 @@
 // The length of each dimension in the given grid does not exceed 50.
 
 
+// [[1,0,0]
+// ,[1,0,0]
+// ,[0,1,1]]
+
+public class Solution {
+
+    /**
+     * @param grid: a list of lists of integers
+     * @return: return an integer, denote the number of distinct islands
+     */
+    int[] deltaX = {0, 0, 1, -1};
+    int[] deltaY = {1, -1, 0, 0};
+    int m, n;
+    public int numDistinctIslands(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        HashSet<String> set = new HashSet();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    List<int[]> list = new ArrayList();
+                    dfs(grid, i, j, list);
+                    Collections.sort(list , new Comparator<int[]>(){
+                        @Override
+                        public int compare(int[] arr1 , int[] arr2){
+                            if(arr1[0] == arr2[0]){
+                                return arr1[1] - arr2[1];
+                            }
+                            return arr1[0] - arr2[0];
+
+                        }
+                    });
+                    set.add(getPath(list));
+                }
+            }
+        }
+        return set.size();
+    }
+    private String getPath(List<int[]> list){
+        String res ="";
+        int x = list.get(0)[0];
+        int y = list.get(0)[1];
+        for(int i = 1 ; i < list.size() ; i++){
+            res += (list.get(i)[0] - x) + "_" + (list.get(i)[1] - y);
+            x = list.get(i)[0];
+            y = list.get(i)[1];
+        }
+        return res;
+    }
+    private void dfs(int[][] grid, int i, int j, List<int[]> list) {
+        if (grid[i][j] == 0) {
+            return;
+        }
+        grid[i][j] = 0;
+        list.add(new int[]{i, j});
+        for (int k = 0; k < 4; k++) {
+            int x = i + deltaX[k];
+            int y = j + deltaY[k];
+            if (x < 0 || y < 0 || x >= m || y >= n) {
+                continue;
+            }
+            dfs(grid, x, y, list);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class Solution {
 
     /**

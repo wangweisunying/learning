@@ -10,6 +10,118 @@
 
 // Given n = 2, prerequisites = [[1,0],[0,1]]
 // Return false
+// /3
+// [[0,2],[1,2],[2,0]]
+
+
+//dfs 
+public class Solution {
+    /*
+     * @param numCourses: a total of n courses
+     * @param prerequisites: a list of prerequisite pairs
+     * @return: true if can finish all courses or false
+     */
+    public boolean canFinish(int n, int[][] prerequisites) {
+        HashMap<Integer , List<Integer>> map = new HashMap();
+        for(int i = 0 ; i < n ; i++){
+            map.put(i , new ArrayList());
+        }
+        for(int[] prerequisite : prerequisites){
+            map.get(prerequisite[1]).add(prerequisite[0]);
+        }
+        
+        for(int node : map.keySet()){
+            boolean[] visited = new boolean[n];
+            visited[node] = true;
+            if(!dfs(visited , map , node)){
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean dfs(boolean[] visited , HashMap<Integer , List<Integer>> map , int cur){
+    
+        boolean res = true;
+        for(int nei : map.get(cur)){
+            if(visited[nei]){
+                return false;
+            }
+            else{
+                visited[nei] = true;
+                if(!dfs(visited , map , nei)){
+                    return false;
+                }
+                visited[nei] = false;
+            }
+        }
+        return res;
+    }
+}
+
+
+
+
+
+
+
+
+public class Solution {
+        public boolean canFinish(int numCourses, int[][] prerequisites) {
+            ArrayList[] graph = new ArrayList[numCourses];
+            for(int i=0;i<numCourses;i++)
+                graph[i] = new ArrayList();
+                
+            boolean[] visited = new boolean[numCourses];
+            for(int i=0; i<prerequisites.length;i++){
+                graph[prerequisites[i][1]].add(prerequisites[i][0]);
+            }
+
+            for(int i=0; i<numCourses; i++){
+                if(!dfs(graph,visited,i))
+                    return false;
+            }
+            return true;
+        }
+
+        private boolean dfs(ArrayList[] graph, boolean[] visited, int course){
+            if(visited[course])
+                return false;
+            else
+                visited[course] = true;;
+
+            for(int i=0; i<graph[course].size();i++){
+                if(!dfs(graph,visited,(int)graph[course].get(i)))
+                    return false;
+            }
+            visited[course] = false;
+            return true;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public class Solution {
     /*

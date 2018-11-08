@@ -7,6 +7,56 @@
 // Example
 // Given array [3,2,3,1,2], return 1.
 
+public class Solution {
+    /**
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    
+    public int maxProfit(int[] prices) {
+        int res = 0;
+        int n = prices.length;
+        int allmin = Integer.MAX_VALUE;
+        for(int i = 0 ; i < n ; i++){
+            allmin = Math.min(allmin , prices[i]);
+            res = Math.max(res , prices[i] - allmin);
+        }
+        return res;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public class Solution {
     /**

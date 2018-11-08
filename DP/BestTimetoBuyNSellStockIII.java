@@ -6,6 +6,75 @@
 // Example
 // Given an example [4,4,6,1,1,4,2,5], return 6.
 
+
+public class Solution {
+    /**
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+*/                                          
+    public int maxProfit(int[] prices) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        int n = prices.length;
+        int[][] f = new int[n][5]; // represents n day status of the max profit
+        // 5 stage status are  0 : 2 tras remain  1 : 1 buy 2 sell : 2 1buy1sell :3 2buy 1 sell  4 : 2buy 2 sell
+        for(int i = 0 ; i < n ; i++ ){
+            if(i == 0){
+                f[i][1] = 0;
+                f[i][2] = 0;
+                f[i][3] = 0;
+                f[i][4] = 0; 
+                continue;
+            }
+
+            //buy                no profit yet , still hold the preday stock
+            f[i][1] = Math.max(f[i - 1][0] , f[i - 1][1] + prices[i] - prices[i - 1] );
+            //sell               sell now , not buy yet
+            f[i][2] = Math.max(f[i - 1][1] + prices[i] - prices[i - 1] , f[i - 1][2] );
+            f[i][3] = Math.max(f[i - 1][2] , f[i - 1][3] + prices[i] - prices[i - 1]);
+            f[i][4] = Math.max(f[i - 1][3] + prices[i] - prices[i - 1] , f[i - 1][4] );
+        }
+        return Math.max(f[n - 1][2] , f[n - 1][4]);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class Solution {
     /**
      * @param prices: Given an integer array

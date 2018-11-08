@@ -14,66 +14,7 @@
 // You may assume both pattern and str contains only lowercase letters.
 
 
-public class Solution {
-    /**
-     * @param pattern: a string,denote pattern string
-     * @param str: a string, denote matching string
-     * @return: a boolean
-     */
-    boolean found;
-    public boolean wordPatternMatch(String pattern, String str) {
-        found = false;
-        Map<Character , String> memo  = new HashMap();
-        Set<String> inMemo = new HashSet();
-        dfs(pattern , str , memo , inMemo);
-        return found;
-    }
-    private boolean dfs(String pattern, String str , Map<Character , String> memo , Set<String> inMemo){
-        
-        
-        if(found){  
-            return true;
-        }
-        if(pattern.length() == 0){
-            if(str.length() == 0){
-                found = true;
-            }
-            return str.length() == 0;
-        }
-        if(str.length() == 0){
-            if(pattern.length() == 0){
-                found = true;
-            }
-            return pattern.length() == 0;
-        }
-        
-        boolean res = false;
-        if(memo.containsKey(pattern.charAt(0))){
-            String tmp = memo.get(pattern.charAt(0));
-            res = str.startsWith(tmp);
-            if(res){
-                res &= dfs(pattern.substring(1) , str.substring(tmp.length()) , memo , inMemo);
-            }
-        }
-        else{
-            for(int i = 1 ; i <= str.length() ; i++){
-                String tmp = str.substring(0 , i);
-                if(inMemo.contains(tmp)){
-                    continue;
-                }
-                char now = pattern.charAt(0);
-                memo.put(now , tmp);
-                inMemo.add(tmp);
-                res = dfs(pattern.substring(1) , str.substring(i) , memo , inMemo);
-                inMemo.remove(tmp);
-                memo.remove(now);
-            }
-        }
-        return res;
-    }
-}
-
-
+//memo search
 public class Solution {
     /**
      * @param pattern: a string,denote pattern string
@@ -115,9 +56,8 @@ public class Solution {
                 char now = pattern.charAt(0);
                 memo.put(now , tmp);
                 inMemo.add(tmp);
-                res = dfs(pattern.substring(1) , str.substring(i) , memo , inMemo);
-                if(res){
-                    return true; //跳出back tricking 
+                if(dfs(pattern.substring(1) , str.substring(i) , memo , inMemo)){
+                    return true; //跳出back tracking 
                 }
                 inMemo.remove(tmp);
                 memo.remove(now);
