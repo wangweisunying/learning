@@ -28,15 +28,7 @@ class Solution {
         if(intervals == null || intervals.size() == 0){
             return list;
         }
-        Collections.sort(intervals , new Comparator<Interval>(){
-            @Override
-            public int compare(Interval I1 , Interval I2){
-                if(I1.start == I2.start){
-                    return I1.end - I2.end;
-                }
-                return I1.start - I2.start;
-            }
-        });
+        Collections.sort(intervals , (a , b) -> (a.start - b.start));
         int start = intervals.get(0).start;
         int end = intervals.get(0).end;
         for(int i = 1 ; i < intervals.size() ; i ++){

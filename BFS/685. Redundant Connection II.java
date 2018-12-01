@@ -49,6 +49,75 @@
 //     else 
 //            remove candidate A instead of B.
 
+class Solution {
+    int[] f;
+    public int[] findRedundantDirectedConnection(int[][] edges) {
+        int[] can1 = new int[]{-1 , - 1};
+        int[] can2 = new int[]{-1 , - 1};
+        int n = edges.length;
+        int[] parent = new int[n + 1];
+        for(int[] edge : edges){
+            if(parent[edge[1]] == 0){
+                parent[edge[1]] = edge[0];
+            }
+            else{
+                //不是之前的 就是现在这个 ， 因为 就只加了一条边 所以只有两个候选
+                can1 = new int[]{parent[edge[1]] ,edge[1]};
+                can2 = new int[]{edge[0] ,edge[1]};
+                //将can2这条边先去掉, 用后面判断反推
+                edge[1] = 0; 
+            }
+        }
+        
+        f= new int[n + 1];
+        for(int i =0  ; i <= n ; i++){
+            f[i] = i;
+        }
+        
+        for(int[] edge : edges){
+            if(edge[1] == 0){
+                continue;
+            }
+            int father = parent[edge[1]];
+            int son = edge[1];
+            
+            if(find(father) == son){
+                //case1 : 图中只有环 没有出现2个父亲的节点 返回 该边
+                if(can1[0] == -1){
+                    return edge;
+                }
+                //如果出现这个边上的节点和节点的一个候选父亲构成环 返回该条边
+                return can1;
+            }
+            union(son , father);
+            // f[son] = father; 
+
+        }
+        // 如果2个parent不构成环 ，返回第二候选人
+        return can2;
+    }
+    private int find(int a){
+        if(f[a] == a){
+            return a;
+        }
+        return f[a] = find(f[a]);
+    }
+    private void union(int a , int b){
+        int rootA = find(a);
+        int rootB = find(b);
+        if(rootA != rootB){
+            f[rootA] = rootB;
+        }
+    }
+}
+
+
+
+
+
+
+
+
 
 
 class Solution {

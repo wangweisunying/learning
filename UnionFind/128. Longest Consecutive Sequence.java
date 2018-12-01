@@ -9,6 +9,50 @@
 // Input: [100, 4, 200, 1, 3, 2]
 // Output: 4
 // Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+
+
+//只需要去set里不断的去找到左右两边出现的值 并同时删除 ， mantian max when doing this.
+public int longestConsecutive(int[] nums) {
+    HashSet<Integer> set = new HashSet();
+    for(int i : nums) set.add(i);
+    int max = 0;
+    for(int i = 0 ; i < nums.length ; i++ ){
+        if(set.contains(nums[i])){
+            int tmp = 1;
+            int left = nums[i] - 1;
+            int right = nums[i] + 1;
+            set.remove(nums[i]);
+            while(set.contains(left)){
+                set.remove(left--);
+                tmp++;  
+            }
+            while(set.contains(right)){
+                set.remove(right++);
+                tmp++;  
+            }
+            max = Math.max(max , tmp);
+        }
+    }
+    return max;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public int longestConsecutive(int[] nums) {
     int res = 0; //cover the nums.length == 0;
     HashMap<Integer ,Integer> map = new HashMap(); // integer num , curMax length

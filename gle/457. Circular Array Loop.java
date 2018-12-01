@@ -21,10 +21,47 @@
 //  Because 0 is fail for sure so when later search meet 0 we know the search will fail.
 public class Solution {
     public boolean circularArrayLoop(int[] nums) {
-        
+        if(nums.length == 0) return false;
+        for(int i = 0 ; i < nums.length ; i++){
+            // int slow = i;
+            int slow = i;
+            int fast = getIndex(i , nums);
+            while(nums[fast] * nums[i] > 0 && nums[getIndex(fast, nums)] * nums[i]> 0){
+                if(slow == fast){
+                    if (slow == getIndex(slow, nums)) {
+                        break;
+                    }
+                    return true;    
+                }                
+                slow = getIndex(slow , nums);
+                fast = getIndex(getIndex(fast , nums) ,nums);
+            }
+            slow = i;
+            int index = nums[i];
+            while (nums[slow] * index > 0) {
+                int next = getIndex(slow, nums);
+                nums[slow] = 0;
+                slow = next;
+            }
 
+        }
+        return false;
+    }
+    private int getIndex(int i , int[] nums){
+        int res = i + nums[i];
+        return res >= 0 ? res % nums.length : nums.length + (res % nums.length);     
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

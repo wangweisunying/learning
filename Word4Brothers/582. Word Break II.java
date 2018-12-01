@@ -9,6 +9,67 @@
 // dict = ["de", "ding", "co", "code", "lint"].
 
 // A solution is ["lint code", "lint co de"].
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Map<String , List<String>> map = new HashMap();
+        return dfs( s, map , new HashSet(wordDict));        
+    }
+    private List<String> dfs(String s,Map<String , List<String>> map , Set<String> wordDict ){
+        if(map.containsKey(s)) return map.get(s);
+        List<String> res = new ArrayList();
+        if(wordDict.contains(s)) res.add(s);
+        for(int i = 1 ; i <= s.length() ; i++){
+            String prefix = s.substring(0 , i);
+            if(!wordDict.contains(prefix)){
+                continue;
+            }
+            List<String> nextList = dfs(s.substring(i) , map , wordDict);
+            
+            for(String nextWord : nextList){
+                res.add(prefix + " " + nextWord);
+            }
+        }
+        map.put(s , res);
+        return res;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Solution {
     public List<String> wordBreak(String s, List<String> wordDict) {

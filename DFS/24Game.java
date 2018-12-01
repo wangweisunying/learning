@@ -6,7 +6,7 @@ class Solution {
         }
         return helper(list );
     }
-    private boolean helper(List<Double> list , ){
+    private boolean helper(List<Double> list ){
         if(list.size() == 1){
             if(Math.abs(24 - list.get(0)) < 0.01){
                 return true;
@@ -26,7 +26,6 @@ class Solution {
                 for(double cur : generate(list.get(i) , list.get(j))){
                     tmp.add(cur);
                     if(helper(tmp)){
-    
                         return true;
                     }
                     tmp.remove(tmp.size() - 1);

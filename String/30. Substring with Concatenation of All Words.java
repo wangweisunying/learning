@@ -22,6 +22,52 @@ public class Solution {
         HashMap<String, Integer> toFind = new HashMap<String, Integer>();
         HashMap<String, Integer> found = new HashMap<String, Integer>();
         for(String word : words){
+            toFind.put(word , toFind.getOrDefault(word , 0 ) + 1);
+        }
+        int m = words.length;
+        int n = words[0].length();
+        for(int i = 0 ; i < s.length() ; i++){
+            int j = i;
+            int ct = 0;
+            found.clear();
+            while(j + n <= s.length()){
+                String tmp = s.substring(j , j + n);
+                if(toFind.containsKey(tmp)){
+                    ct++;
+                    found.put(tmp , found.getOrDefault(tmp , 0 ) + 1);
+                    if(found.get(tmp) > toFind.get(tmp)){
+                        ct = 0;
+                        break;
+                    }
+                }
+                else{
+                    ct = 0;
+                    break;
+                }
+                
+                if(ct == m){ //once met the request break!
+                    result.add(i);
+                    break;
+                }
+                j += n;
+            }
+        }
+        return result; 
+        
+    }    
+}
+
+
+
+public class Solution {
+    public ArrayList<Integer> findSubstring(String s, String[] words) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        if(s.equals("") || words.length == 0){
+            return result;
+        }
+        HashMap<String, Integer> toFind = new HashMap<String, Integer>();
+        HashMap<String, Integer> found = new HashMap<String, Integer>();
+        for(String word : words){
             if(toFind.containsKey(word)){
                 toFind.put( word , toFind.get(word) + 1 );
             }

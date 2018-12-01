@@ -13,6 +13,9 @@
 
 
 
+
+
+
 //这是3 sum 的变种 双指针
 class Solution {
     public int triangleNumber(int[] nums) {
@@ -22,14 +25,10 @@ class Solution {
         Arrays.sort(nums);
         int ct = 0;
         for(int k = 2 ; k < nums.length ; k++){
-            // if(k < nums.length - 1 && nums[k] = nums[k + 1]){
-            //     continue;
-            // }
             int i = 0 , j = k - 1;
             while(i < j){
                 if(nums[i] + nums[j] > nums[k]){
-                    //画图想清楚
-                    ct+= j - i;
+                    ct += j - i;
                     j--;
                 }
                 else{

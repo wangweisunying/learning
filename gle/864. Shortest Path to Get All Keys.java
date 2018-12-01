@@ -26,3 +26,73 @@
 // 1 <= grid[0].length <= 30
 // grid[i][j] contains only '.', '#', '@', 'a'-'f' and 'A'-'F'
 // The number of keys is in [1, 6].  Each key has a different letter and opens exactly one lock.
+
+class Solution {
+    class Status{
+        int x , y , keys;
+        Status(int x ,int y , int keys){
+            this.x = x;
+            this.y = y;
+            this.keys = keys;
+        }
+    }
+    public int shortestPathAllKeys(String[] grid) {
+        int m = grid.length;
+        int n = grid[0].length();
+        HashSet<String> visited = new HashSet();
+        int max = -1;
+        Queue<Status> que = new LinkedList();
+        for(int i = 0 ; i < m ; i++){
+            for(int j = 0 ; j < grid[i].length() ; j++){
+                if(grid[i].charAt(j) == '@'){
+                    visited.add(i + "_" + j + "_" + 0);
+                    que.offer(new Status(i , j , 0));
+                }
+                if(grid[i].charAt(j) >= 'a' && grid[i].charAt(j) <= 'f'){
+                    max = Math.max(max ,grid[i].charAt(j) - 'a' + 1);
+                }
+            }
+        }
+        
+        int[] deltaX = {1 , -1 , 0 , 0};
+        int[] deltaY = {0 , 0 , 1 , -1};
+        int ct = 0;
+        while(!que.isEmpty()){
+            int size = que.size();
+            for(int k = 0 ; k < size ; k++){
+                Status cur = que.poll();
+                if (cur.keys == (1 << max) - 1) {
+                    return ct;
+                }
+                for(int i = 0 ; i < 4 ; i++){
+                    int x = cur.x + deltaX[i];
+                    int y = cur.y + deltaY[i];
+                    int keys = cur.keys;
+                    if(x < 0 || y < 0 || x >=m || y >= n || grid[x].charAt(y) == '#'){
+                        continue;
+                    }
+                    if(visited.contains(x + "_" + y + "_" + keys)){
+                        continue;
+                    }
+                    char c = grid[x].charAt(y);
+                    // move the key to the right() check whether it match the lock 1
+                    if (c >= 'A' && c <= 'F' && (keys >> (c - 'A') & 1 )== 0) {
+                        continue;
+                    }
+                    if (c >= 'a' && c <= 'f') {
+                        //move the key to the left
+                        keys |= 1 << (c-'a');
+                    }
+                    
+                    visited.add(x + "_" + y + "_" + keys);
+                    que.offer(new Status(x , y , keys));
+                    
+                }
+                
+                
+            }
+            ct++;
+        }        
+        return -1;
+    }
+}
