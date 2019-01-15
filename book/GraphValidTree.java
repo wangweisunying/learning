@@ -66,44 +66,44 @@ public class Solution {
 }
 
 
-//dfs TLE
-
-public class Solution {
-    /**
-     * @param n: An integer
-     * @param edges: a list of undirected edges
-     * @return: true if it's a valid tree, or false
-     */
+class Solution {
     public boolean validTree(int n, int[][] edges) {
-        if (edges.length != n - 1) {
-            return false;
-        }
-        
-        HashMap<Integer , HashSet<Integer>> map = new HashMap();
+        Map<Integer , List<Integer>> map = new HashMap();
         for(int[] edge : edges){
-            map.computeIfAbsent(edge[0] , x -> new HashSet()).add(edge[1]);
-            map.computeIfAbsent(edge[1] , x -> new HashSet()).add(edge[0]);
+            if(map.containsKey(edge[0])){
+                map.get(edge[0]).add(edge[1]);
+            }
+            else{
+                map.put(edge[0], new ArrayList(Arrays.asList(edge[1])));
+            }
+            if(map.containsKey(edge[1])){
+                map.get(edge[1]).add(edge[0]);
+            }
+            else{
+                map.put(edge[1], new ArrayList(Arrays.asList(edge[0])));
+            }      
         }
-        if(map.size() == 0){
-            return true;
-        }
-        
-        boolean[] visited = new boolean[n];
-        visited[0] = true;
-        HashSet<Integer> set = new HashSet();
-        dfs( 0 , map , visited , set);
-        return set.size() == n;
+        HashSet<Integer> visited = new HashSet();
+        visited.add(0);
+        dfs(map ,visited , 0 , - 1);
+        return visited.size() == n && !cycle;
     }
-    private void dfs(int node, HashMap<Integer , HashSet<Integer>> map , boolean[] visited , HashSet<Integer> set){
-        set.add(node);
-        for(int neighbor : map.get(node)){
-            if(visited[neighbor]){
+    boolean cycle = false;
+    private void dfs(Map<Integer , List<Integer>> map , HashSet<Integer> visited , int start  , int parent ){
+        if(!map.containsKey(start)){
+            return;
+        }
+        for(int next : map.get(start)){
+            if(visited.contains(next) && parent != next){
+                cycle = true;
+            }
+            if(visited.contains(next)){
                 continue;
             }
-            visited[neighbor] = true;
-            dfs(neighbor , map ,visited , set);
-            visited[neighbor] = false;
-        }
+            
+            visited.add(next);
+            dfs(map , visited , next , start);
+        }    
     }
 }
 

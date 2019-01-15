@@ -31,6 +31,10 @@
 // The length of board[i] will be in the range [3, 50].
 // Each board[i][j] will initially start as an integer in the range [1, 2000].
 
+
+// 思路 先crush 再drop ， 
+// crush 要分层统计 ，再分列统计需要消除的axis
+// drop自下而上 经典merge 问题
 class Solution {
     int m , n;
     public int[][] candyCrush(int[][] board) {
@@ -70,6 +74,8 @@ class Solution {
         for(int i = 0 ; i < m ; i++){
             int s = 0 , e = 0 , pre = board[i][s];
             while(e < n){
+
+                // skip all 0s
                 if(board[i][e] == board[i][s] && board[i][s] == 0){
                     s++;
                     e++;

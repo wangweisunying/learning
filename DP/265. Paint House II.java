@@ -11,11 +11,84 @@
 // // All costs are positive integers.
 
 // // Example:
-
 // // Input: [[1,5,3],[2,9,4]]
 // // Output: 5
 // // Explanation: Paint house 0 into color 0, paint house 1 into color 2. Minimum cost: 1 + 4 = 5; 
 // //              Or paint house 0 into color 2, paint house 1 into color 0. Minimum cost: 3 + 2 = 5. 
+
+
+// f[i][j] stand for the cur min value I chose j color
+//如何找出除了 j color 外 的最小值？ 需要存前一次的 最小值和次小值的 index 
+class Solution {
+    public int minCostII(int[][] costs) {
+        
+        if(costs == null || costs.length == 0) return 0;
+        int m = costs.length , n = costs[0].length;
+        int[][] f = new int[m + 1][n];
+        int index1 = -1 , sindex1 = -1;
+        for(int i = 1 ; i <= m ; i++){
+            int index2 = -1 , sindex2 = -1;
+            for(int j = 0 ; j < n ; j++){
+                if(index1 == -1 && sindex1 == -1){
+                    f[i][j] = costs[i - 1][j];
+                }
+                else{
+                    f[i][j] = costs[i - 1][j] + (j == index1 ? f[i - 1][sindex1] : f[i - 1][index1]);  
+                }
+
+                // update the index now to pre     
+                if(index2 == -1 || f[i][index2] >= f[i][j]){
+                    sindex2 = index2;
+                    index2 = j;
+                }
+                else if(sindex2 == -1 || f[i][sindex2] >= f[i][j]){
+                    sindex2 = j;
+                }
+            }
+            index1 = index2;
+            sindex1 = sindex2;
+        }
+        return f[m][index1];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Solution {

@@ -1,0 +1,105 @@
+
+很少看到系统设计讨论的贴，希望大家能提供宝贵意见，很多人都不知道怎么准备系统设计问题
+
+1. Design web游戏 Hangman game
+请问怎样展开这个设计讨论，需要问哪些问题？
+对于这样一个设计，前端，后端，数据库怎么选择？
+游戏里需要考虑什么function？
+请问我应该从哪些方面展开设计？
+
+2. System design: linkedin上的用户会用到很多shared links，然后要求设计个service来统计过去五分钟， 一个小时， 一天或着一周里， 出现次数最多的Top k个shared links。
+请问我应该从哪些方面展开设计？
+请问实时更新怎么解决？
+
+3. design a system to get top k exceptions/errors within a system for the given period of time . From 1point 3acres bbs
+  there are large number of servers.
+  there are large number of exceptions
+  k is subject to change
+  time period is subject to change
+  granularity of time is minute level
+follow up: 讨论下如果要处理N台机器的log怎么做分布式。
+
+请问怎么获取各个server的exception？是从log file 里读取exception message吗？
+请问我应该从哪些方面展开设计？
+
+4. 一个单机类 stream 单写多读系统，生产者会不定期地生成一个数值，消费者们不定期地通过 geAvg5min() 获取过去5分钟内生成的数值的平均值。
+5. 如何设计一个model判断一条信息是不是广告
+6. design侦测恶意的封包，一直followup各种骇客的behavoir来破解系统
+7. Sys Design，设计一个系统 收集很多服务器上不同metrics的数据 在前端做任何维度的展示
+(不同时间段,不同的metric, 以及sum avg等)
+历史数据比较大的话怎么搞省数据库空间? （感觉这轮稍难）
+8. Design LinkedIn.
+search功能里inverted index 和data of user , data of company 怎么存，分别用Nosql还是sql？然后设计timeline， 问我push/pull模型在哪儿看的
+9.设计google日历 要求1000用户，并可能拓展到100M+
+10. System design. 如何判断friend，friend of friend，friend of friend of friend，followup如何shard data提高效率. check 1point3acres for more.
+（design api。给定一个get_friends_lists() 问怎么判断两个是1 degree friends，2 degree friends 还是 3 degree friends。）
+（已知一个函数，输入用户ID，可以返回该用户的所有友好（degree 1 friends），按好友ID从小到大排序。
+要求实现函数来输出返回一个用户的所有好友的好友(degree 2 friends), 以及 degree 3 friends。）
+
+
+https://soulmachine.gitbooks.io/system-design/content/cn/bigdata/frequency-estimation.html
+
+2，3，7 是Top k问题。
+
+系统设计千万不要直接上名词。及时你知道top k问题可以kafka + xxx 处理，你也别说，甚至可以完全不提kafka，但是你讲你的设计完全可以照搬卡夫卡的思路。
+还有就是实时性的trade-off， 如果实时性，精度要求不高，可以批量写，比如 +1 +1 +1 在client 累计到10次以后，发个 +10 的reqeust之类的。
+一个小时， 一天或着一周里，就是分级存储的思路，分成好几个bucket
+
+
+8 是 push/pull的trade off 讲清楚。
+
+1 要说的太多了，得看怎么和面试官讨论。
+
+4 参照 rate limiter 的思路？
+5 不太像系统设计，感觉像数据科学
+6  也不清楚具体要求，我觉得一个思路就是还是top k思路，某个behavor在最近一个小时发生最多，可能有问题。。。
+9  日历问题，感觉重点在讨论重复的event怎么存，怎么看一个人在某一个时段是不是available
+    我认为是这样，比如当前日子前后n个礼拜可以预先计算好，更远的时间范围可以需要的时候临时计算，因为大部分request都是查询当前时间前后n个礼拜的。
+
+10  L家有篇论文专门说怎么找2nd degree朋友，可以看看，具体忘了，大概就是直接算好载入缓存？？
+
+
+https://soulmachine.gitbooks.io/system-design/content/cn/bigdata/frequency-estimation.html
+
+top K exceptions
+寻找数据流中出现最频繁的k个元素(find top k frequent items in a data stream)。这个问题也称为 Heavy Hitters.
+这题也是从实践中提炼而来的，例如搜索引擎的热搜榜，找出访问网站次数最多的前10个IP地址，等等。
+方案1: HashMap + Heap
+用一个 HashMap<String, Long>，存放所有元素出现的次数，用一个小根堆，容量为k，存放目前出现过的最频繁的k个元素，
+每次从数据流来一个元素，如果在HashMap里已存在，则把对应的计数器增1，如果不存在，则插入，计数器初始化为1
+在堆里查找该元素，如果找到，把堆里的计数器也增1，并调整堆；如果没有找到，把这个元素的次数跟堆顶元素比较，如果大于堆丁元素的出现次数，
+则把堆丁元素替换为该元素，并调整堆
+空间复杂度O(n)。HashMap需要存放下所有元素，需要O(n)的空间，堆需要存放k个元素，需要O(k)的空间，跟O(n)相比可以忽略不急，总的时间复杂度是O(n)
+时间复杂度O(n)。每次来一个新元素，需要在HashMap里查找一下，需要O(1)的时间；然后要在堆里查找一下，O(k)的时间，有可能需要调堆，又需要O(logk)的时间，
+总的时间复杂度是O(n(k+logk))，k是常量，所以可以看做是O(n)。
+如果元素数量巨大，单机内存存不下，怎么办？ 有两个办法，见方案2和3。
+方案2: 多机HashMap + Heap
+可以把数据进行分片。假设有8台机器，第1台机器只处理hash(elem)%8==0的元素，第2台机器只处理hash(elem)%8==1的元素，以此类推。
+每台机器都有一个HashMap和一个 Heap, 各自独立计算出 top k 的元素
+把每台机器的Heap，通过网络汇总到一台机器上，将多个Heap合并成一个Heap，就可以计算出总的 top k 个元素了
+方案3: Count-Min Sketch + Heap
+既然方案1中的HashMap太大，内存装不小，那么可以用Count-Min Sketch算法代替HashMap，
+在数据流不断流入的过程中，维护一个标准的Count-Min Sketch 二维数组
+维护一个小根堆，容量为k
+每次来一个新元素，
+将相应的sketch增1
+在堆中查找该元素，如果找到，把堆里的计数器也增1，并调整堆；如果没有找到，把这个元素的sketch作为钙元素的频率的近似值，
+跟堆顶元素比较，如果大于堆丁元素的频率，则把堆丁元素替换为该元素，并调整堆
+这个方法的时间复杂度和空间复杂度如下：
+空间复杂度O(dm)。m是二维数组的列数，d是二维数组的行数，堆需要O(k)的空间，不过k通常很小，堆的空间可以忽略不计
+时间复杂度O(nlogk)。每次来一个新元素，需要在二维数组里查找一下，需要O(1)的时间；然后要在堆里查找一下，
+O(logk)的时间，有可能需要调堆，又需要O(logk)的时间，总的时间复杂度是O(nlogk)。
+方案4: Lossy Counting
+Lossy Couting 算法流程：
+建立一个HashMap，用于存放每个元素的出现次数
+建立一个窗口（窗口的大小由错误率决定，后面具体讨论）
+等待数据流不断流进这个窗口，直到窗口满了，开始统计每个元素出现的频率，统计结束后，每个元素的频率减1，然后将出现次数为0的元素从HashMap中删除
+返回第2步，不断循环
+Lossy Counting 背后朴素的思想是，出现频率高的元素，不太可能减一后变成0，如果某个元素在某个窗口内降到了0，
+说明它不太可能是高频元素，可以不再跟踪它的计数器了。随着处理的窗口越来越多，HashMap也会不断增长，同时HashMap里的低频元素会被清理出去，这样内存占用会保持在一个很低的水平。
+很显然，Lossy Counting 算法是个近似算法，但它的错误率是可以在数学上证明它的边界的。假设要求错误率不大于ε，
+那么窗口大小为1/ε，对于长度为N的流，有N／（1/ε）＝εN 个窗口，由于每个窗口结束时减一了，那么频率最多被少计数了窗口个数εN。
+该算法只需要一遍扫描，所以时间复杂度是O(n)。
+该算法的内存占用，主要在于那个HashMap, Gurmeet Singh Manku 在他的论文里，证明了HashMap里最多有 1/ε log (εN)个元素，所以空间复杂度是O(1/ε log (εN))。
+方案5: SpaceSaving
+TODO, 原始论文 "Efficient Computation of Frequent and Top-k Elements in Data Streams"

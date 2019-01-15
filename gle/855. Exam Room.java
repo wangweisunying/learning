@@ -48,7 +48,7 @@
 // Expected answer
 // [null,0,9,4,2,null,5]
 
-A few concepts to discover:
+// A few concepts to discover:
 
 // Need to measure the distance between seated students: O(n) is trivial, but not as fast. Use PriorityQueue to store the potential candidate as interval, and also calculate the candidate's mid-distance to both side.
 // seat(): pq.poll() to find interval of largest distance. Split and add new intervals back to queue.
@@ -56,6 +56,12 @@ A few concepts to discover:
 // Trick: there is no interval when adding for first student, so we need to create boundary/fake seats [-1, N], which simplifies the edge case a lot. (I spent hours on edge case, and finally saw a smart abstraction using boundary seats).
 // Once these concepts are clear, all the rest is busy coding : )
 // PriorityQueue
+
+
+
+
+
+
 class ExamRoom {
     PriorityQueue<Interval> pq;
     int N;
@@ -111,6 +117,23 @@ class ExamRoom {
         pq.offer(new Interval(head.x, tail.y));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

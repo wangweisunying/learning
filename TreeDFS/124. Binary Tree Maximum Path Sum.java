@@ -78,12 +78,13 @@
 // DG  ,1. 分为选  左 ， 右 ， 自己  可加 
         // 2. 若同时加了左右 ， 无法往上传递 ，所以只需要往上传递 1的值
 class Solution {
-    
     public int maxPathSum(TreeNode root) {
         int[] max = new int[]{Integer.MIN_VALUE};
         dfs(root , max);
         return max[0]; 
     }
+
+    //return 可以往上传的最大值
     private int dfs(TreeNode root , int[] max){
         if(root == null) return 0;
         int res = root.val;

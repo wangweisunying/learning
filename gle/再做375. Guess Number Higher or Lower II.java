@@ -28,6 +28,56 @@
 // then we get DP([i~j]) = min{xi, ... ,xj}
 // --> // this min makes sure that you are minimizing your cost.
 
+
+
+class Solution {
+    public int getMoneyAmount(int n) {
+        int[][] f = new int[n + 1][n + 1];    
+        dfs( f , 1 , n);
+        return f[1][n];
+    }
+    int dfs(int[][] f , int s , int e){
+        if(s >= e) return 0; // 递归出口是 s>=e  =e 因为 最后选对了不需要cost
+        if(f[s][e] != 0) return f[s][e];
+        f[s][e] = Integer.MAX_VALUE;
+        for(int k = s ; k <= e ; k++){
+            //遍历k 两侧 最大值 ，即 选k的cost
+            int tmp = Math.max(dfs(f , s , k - 1) , dfs(f , k + 1 , e)) + k;
+            ///找出所有k的最少cost
+            f[s][e] = Math.min(f[s][e] , tmp);
+        }
+        return f[s][e];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //记忆搜索！
 class Solution {
     public int getMoneyAmount(int n) {

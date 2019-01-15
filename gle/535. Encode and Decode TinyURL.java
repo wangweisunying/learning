@@ -11,6 +11,67 @@
 
 
 public class Codec {
+
+    // Encodes a URL to a shortened URL.
+    int id = 1;
+    Map<Integer , String > map = new HashMap();
+    String base62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
+    public String encode(String longUrl) {
+        map.put(id , longUrl);
+        String res = "";
+        int tmpId = id;
+        while(tmpId > 0){
+            res += base62.charAt(tmpId % 62);
+            tmpId /= 62;
+        }
+        ++id;
+        return res;
+    }
+
+    // Decodes a shortened URL to its original URL.
+    public String decode(String shortUrl) {
+        int res = 0 ;
+        // 类似 stack 14（ab）算法
+        for(int i = 0 ; i < shortUrl.length() ; i++){
+            res += res * 62 + base62.indexOf(shortUrl.charAt(i));
+        }
+        return map.get(res);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public class Codec {
     Map<Integer, String> map = new HashMap<>();
 
     public String encode(String longUrl) {

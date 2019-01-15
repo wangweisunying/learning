@@ -19,6 +19,21 @@
 // Output: 3
 // Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // print out result
     public static void main(String[] args) throws Exception {
         numDecodings("123456789");

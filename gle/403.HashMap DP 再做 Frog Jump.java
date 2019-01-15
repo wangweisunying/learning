@@ -66,9 +66,6 @@
 //  we update that stone's steps by adding step, step + 1, step - 1. If we can reach the final stone, we return true. No need to calculate to the last stone.
 
 
-
-
-
 class Solution {
     public boolean canCross(int[] stones) {
         HashMap<Integer , Set<Integer>> map = new HashMap();
@@ -90,9 +87,6 @@ class Solution {
         return map.get(stones[stones.length - 1]).size() > 0;
     }
 }
-
-
-
 
 public class Solution {
     public boolean canCross(int[] stones) {

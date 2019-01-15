@@ -24,6 +24,59 @@
 
 //focus on the conercases when 6 , 9 in the middle , and 0 in the very front when len > 1;
 
+// trick part  char[] arr stand for String  append from outside to middle
+class Solution {
+    public int strobogrammaticInRange(String low, String high) {
+        int res = 0;
+        for(int len = low.length() ; len <= high.length() ; len ++){
+            char[] arr = new char[len];
+            int[] ct = new int[1];
+            dfs(arr , 0 , len - 1 , low , high ,new char[][]{{'0' , '0'} , {'1','1'} , {'6','9'} , {'9','6'} , {'8','8'}} ,ct);
+            res += ct[0];
+        }
+        return res;
+    }
+
+    private void dfs(char[] arr , int s , int e ,String low , String high , char[][] pairs , int[] ct){
+        if(s > e){
+            String now = new String(arr);
+            if(now.length() == low.length() && now.compareTo(low) < 0) return;
+            if(now.length() == high.length() && now.compareTo(high) > 0) return;
+            ct[0]++;
+            return;
+        }
+        for(char[] pair : pairs){
+            // get rid of 0 case
+            if(pair[0] == '0' && s == 0 && arr.length != 1) continue;
+            if(s == e && (pair[0] == '6' || pair[0] == '9')) continue;
+            arr[s] = pair[0];
+            arr[e] = pair[1];
+            dfs(arr , s + 1 , e - 1 , low ,high , pairs , ct);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Solution {
     int ct = 0;

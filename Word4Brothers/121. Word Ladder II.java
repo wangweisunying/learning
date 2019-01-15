@@ -1,24 +1,123 @@
-
-// 121. Word Ladder II
-// Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
+// 126. Word Ladder II
+// Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation sequence(s) from beginWord to endWord, such that:
 
 // Only one letter can be changed at a time
-// Each intermediate word must exist in the dictionary
-// Example
-// Given:
-// start = "hit"
-// end = "cog"
-// dict = ["hot","dot","dog","lot","log"]
+// Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
+// Note:
 
-// Return
+// Return an empty list if there is no such transformation sequence.
+// All words have the same length.
+// All words contain only lowercase alphabetic characters.
+// You may assume no duplicates in the word list.
+// You may assume beginWord and endWord are non-empty and are not the same.
+// Example 1:
 
+// Input:
+// beginWord = "hit",
+// endWord = "cog",
+// wordList = ["hot","dot","dog","lot","log","cog"]
+
+// Output:
 // [
 //   ["hit","hot","dot","dog","cog"],
 //   ["hit","hot","lot","log","cog"]
 // ]
-// Notice
-// All words have the same length.
-// All words contain only lowercase alphabetic characters.
+// Example 2:
+
+// Input:
+// beginWord = "hit"
+// endWord = "cog"
+// wordList = ["hot","dot","dog","lot","log"]
+
+// Output: []
+
+// Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+
+
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        List<List<String>> res = new ArrayList();
+        Set<String> set = new HashSet(wordList);
+        if(!set.contains(endWord)) return res;
+        Queue<String> que = new LinkedList();
+        
+        que.offer(endWord);
+        Map<String , Integer> disMap = new HashMap();
+        disMap.put(endWord , 0);
+
+        int dis = 0;
+        while(!que.isEmpty()){
+            ++dis;
+            int size = que.size();
+            for(int i = 0 ; i < size ; i++){
+                String curWord = que.poll();
+                for(int j = 0  ; j < curWord.length() ; j++){
+                    for(char ch = 'a' ; ch <= 'z' ; ch++ ){
+                        String next = curWord.substring(0 , j) + ch + curWord.substring(j + 1);
+                        if(!set.contains(next) || disMap.containsKey(next)) continue;
+                        disMap.put(next , dis);
+                        que.offer(next);    
+                    }
+                }    
+            }
+        }
+
+        dfs(res , disMap , new ArrayList(Arrays.asList(beginWord)), beginWord , endWord , new HashSet());
+        return res;
+    }
+    private void dfs(List<List<String>> res , Map<String , Integer> disMap , List<String> cur, String curWord , String end , Set<String> visited){
+        if(curWord.equals(end)){
+            res.add(new ArrayList(cur));
+            return;
+        } 
+        
+        List<String> canList = new ArrayList();
+        int dis = Integer.MAX_VALUE;
+        for(int j = 0  ; j < curWord.length() ; j++){
+            for(char ch = 'a' ; ch <= 'z' ; ch++ ){
+                String next = curWord.substring(0 , j) + ch + curWord.substring(j + 1);
+                if(visited.contains(next) || !disMap.containsKey(next)) continue;
+                int distance = disMap.get(next);
+                if(dis > distance){
+                    canList.clear();
+                    canList.add(next);
+                    dis = distance;
+                }
+                else if( dis == distance) canList.add(next);
+            }
+        }
+        
+        for(String next : canList){
+            cur.add(next);
+            visited.add(next);
+            dfs(res , disMap , cur , next , end , visited);
+            visited.remove(next);
+            cur.remove(cur.size() - 1);    
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 public class Solution {
@@ -30,7 +129,6 @@ public class Solution {
      */
     public List<List<String>> findLadders(String start, String end, Set<String> dict) {
         List<List<String>> res = new ArrayList();
-        
         HashMap<String , Integer> dis_map = new HashMap();
         
         Queue<String> que = new LinkedList(); 

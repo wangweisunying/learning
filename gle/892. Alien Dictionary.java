@@ -44,6 +44,68 @@
 // Expected
 // "yxz"
 
+//z zb
+class Solution {
+    public String alienOrder(String[] words) {
+        Map<Character , Set<Character>> map = new HashMap();
+        Map<Character , Integer> indegree = new HashMap();
+        //先初始化很重要
+        for(String word : words){
+            for(char c : word.toCharArray()){
+                map.putIfAbsent(c , new HashSet());
+                indegree.putIfAbsent(c , 0);
+            }
+        }
+        for(int i = 0 ; i < words.length - 1 ; i++){
+            String w1 = words[i] , w2 = words[i + 1];
+            for(int j = 0 ; j < Math.min(w1.length() , w2.length()) ;j++){
+
+                // 加过的映射 不需要加第二便
+                if(w1.charAt(j) != w2.charAt(j)){
+                    if(!map.get(w1.charAt(j)).contains(w2.charAt(j))){
+                        map.get(w1.charAt(j)).add(w2.charAt(j));
+                        indegree.put(w2.charAt(j) , indegree.get(w2.charAt(j)) + 1);
+                    }
+                    break;
+                }
+            }
+        }
+        Queue<Character> que = new PriorityQueue<>();
+        for(char key : indegree.keySet()){
+            if(indegree.get(key) == 0) que.offer(key);
+        }
+        
+        String res = "";
+        while(!que.isEmpty()){
+            int size = que.size();
+            for(int i = 0 ; i < size ; i++){
+                char cur = que.poll();
+                res += cur;
+                for(char next : map.get(cur)){
+                    indegree.put(next , indegree.get(next) - 1);
+                    if(indegree.get(next) == 0){
+                        que.offer(next);
+                    }
+                }   
+            }
+        }
+
+        //可能是森林 需要判断
+        if(res.length() != indegree.size()) return "";
+        return res;
+    }
+}
+
+// ["za","zb","ca","cb"]
+// Your answer
+// "azc"
+// Expected answer
+// "abzc"
+
+
+
+
+
 // 思路判断有向图有无环的问题 用拓扑排序 ，或者dfs ,因为要根据英文顺序排列， 所以需要用priority queue 所以 用拓扑排序来解
 // ， 最后需要判断一下String 的size 要和节点数量一致,有可能是森林的情况
 

@@ -15,11 +15,44 @@
 
  
 
+// public class Solution {
+//     public int largestRectangleArea(int[] height) {
+//         Stack<Integer> stack = new Stack();
+//         int max = 0;
+//         stack.push(-1);
+//         int i = 0;
+//         for(; i < height.length ; i++){
+//             int checkHeight = 0;
+//             if(stack.peek() != -1) checkHeight = height[stack.peek()];
+//             if(checkHeight <= height[i]){
+//                 stack.push(i);
+//             }
+//             else{
+//                 while(stack.peek() != -1 && height[stack.peek()] > height[i]){
+//                     max = Math.max( (i - stack.peek()) * height[stack.pop()] , max);
+//                 }
+//             }
+//         }
+//         int min = Integer.MAX_VALUE;
+//         while(stack.peek() != -1 && !stack.isEmpty()){
+//             min = Math.min(min , height[stack.peek()]);
+//             max = Math.max((i - stack.peek()) * height[stack.pop()] , max);
+//         }
+
+//         return Math.max( i * min , max);
+//     }
+// }
+
+
+
 
 
 
 
 // For explanation, please see http://www.geeksforgeeks.org/largest-rectangle-under-histogram/
+
+
+
 
 
 //stack stack push 单调增的的数字的index , once met the number less than the stack , pop 

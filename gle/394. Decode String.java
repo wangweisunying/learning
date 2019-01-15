@@ -16,6 +16,72 @@
 // s = "3[a2[c]]", return "accaccacc".
 // s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
 
+//tricky part mett number push number , reach '[' , push cur String , set cuString to "", meet ']' pop preString , pop Ct  
+class Solution {
+    public String decodeString(String s) {
+        String res = "";
+        StringBuilder sb = new StringBuilder();
+        Stack<String> stack = new Stack();
+        for(int i = 0 ; i < s.length() ; i++){
+            if(Character.isDigit(s.charAt(i))){
+                int ct = 0;
+                while(Character.isDigit(s.charAt(i))){
+                    ct = ct * 10 + (s.charAt(i) - '0');
+                    ++i;    
+                }
+                stack.push("" + ct);
+                --i;
+                continue;
+            }
+            if(s.charAt(i) == '['){
+                stack.push(sb.toString());
+                sb.setLength(0);
+                continue;
+            }
+            if(s.charAt(i) == ']'){
+                String pre = stack.pop();
+                int ct = Integer.parseInt(stack.pop());
+                for(int j = 0 ; j < ct ; j++ ){
+                    pre += sb.toString();
+                }
+                sb = new StringBuilder(pre);
+                continue;
+            }
+            sb.append(s.charAt(i));
+        }
+        return sb.toString();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Solution {
     public String decodeString(String s) {
         Stack<String> stack = new Stack();

@@ -45,7 +45,60 @@
      *  So we can use y0&x0 to track a line;
      */
     
-
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+class Solution {
+    public int maxPoints(Point[] points) {
+        if(points == null ) return 0;
+        if(points.length <= 2) return points.length;
+        int max = 0;
+        for(int i = 0 ; i < points.length - 1 ; i++){
+            Map<String , Integer > map = new HashMap();
+            int dup = 0;
+            for(int j = i + 1 ; j < points.length ; j++){
+                if(points[i].x == points[j].x && points[i].y == points[j].y){
+                    ++dup;
+                    continue;
+                } 
+                String slope = getSlope(points[i] , points[j]);
+                map.put(slope, map.getOrDefault(slope , 0) + 1);
+            }
+            
+            if(map.isEmpty()){
+                max = Math.max(max , dup);
+            }
+            else{
+                for(int ct : map.values()){
+                    max = Math.max(ct + dup , max);
+                }
+            }
+        }
+        return max + 1;
+    }
+    private String getSlope(Point p1 , Point p2){
+        int up = p1.x - p2.x;
+        int down = p1.y - p2.y;
+        if(up == 0) return up +"_";
+        if(down == 0)return "_"+down;
+        int x = gcd(up , down);
+        up/=x;
+        down/=x;
+        return up + "_" + down;
+    }
+    private int gcd(int x , int y){
+        if(x == 0){
+            return y;
+        }
+        return gcd(y % x , x);
+    }
+}
 
 
 

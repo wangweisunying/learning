@@ -32,13 +32,60 @@
 8
  * }
 9
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
  */
-// [[1,3],[6,9]]
+
+//  [[1,3],[6,9]]
 // [2,5]
-// Your answer
-// [[1,3],[2,9]]
-// Expected answer
+// Output
+// [[1,3],[6,9]]
+// Expected
 // [[1,5],[6,9]]
+class Solution {
+    public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+        if(newInterval == null) return intervals;
+        List<Interval> res = new ArrayList();
+        for(int i = 0 ; i < intervals.size() ; i++){
+            Interval cur = intervals.get(i);
+            if(cur.start > newInterval.end){
+                res.add(newInterval);
+                while(i < intervals.size()) res.add(intervals.get(i++));
+                return res;
+            } 
+            else if(cur.end < newInterval.start) res.add(cur);
+            else{
+                newInterval.start = Math.min(newInterval.start , cur.start);
+                newInterval.end = Math.max(newInterval.end , cur.end);
+            }
+        }
+        res.add(newInterval);
+        return res;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Solution {
 

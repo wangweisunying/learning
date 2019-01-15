@@ -1,0 +1,9 @@
+原子性
+对于 int , boolean 等基本类型的并发环境下， 多线程调用出现的不同步问题 ， 用Atomic 包去 定义 如 用AtomicInteger 来代替int 底层通过cas(compareAndSwap 方法实现 do{} while( ！cas(cur , 内存内的值))) 修改
+缺点 ：很多访问情况下， 重复情况很高 ，慢
+
+
+Synchronized
+同步代码块  作用（duixiang）
+同步函数 作用当前调用函数的对象
+静态方法  作用该类的所有对象

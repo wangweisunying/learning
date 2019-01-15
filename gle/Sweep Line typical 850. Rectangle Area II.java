@@ -25,25 +25,91 @@
 // The total area covered by all rectangles will never exceed 2^63 - 1 and thus will fit in a 64-bit signed integer.
 
 
-
-// [[0,0,1000000000,1000000000]]
-// Output:
-// 0
-// Expected:
-// 49\
-
-
-
-
-// [[0,0,2,2],[1,1,3,3]]
-// Output:
-// 8
-// Expected:
-// 7
-
 //sweep line , 1. traverse from the top to bottom , add all the open rec and close rec to the Array ,
 // ,2 .use a honzonal line get all the x Axis interval , merge the interval if they are overlapping
 // 3 .delte any of the rec close when met close flag
+
+class Solution {
+    public int rectangleArea(int[][] rectangles) {
+        if(rectangles == null || rectangles.length == 0) return 0;
+        int mod = 1_000_000_007;
+        List<int[]> list = new ArrayList();
+        for(int[] rec : rectangles){
+            list.add(new int[]{rec[0] , rec[2] , rec[3] , 1 });
+            list.add(new int[]{rec[0] , rec[2] , rec[1] , -1});
+        }
+        Collections.sort(list, (a , b) -> (b[2] - a[2]));
+        int res = 0 ,height = list.get(0)[2];
+        List<int[]> sweepList = new ArrayList(Arrays.asList(new int[]{list.get(0)[0] , list.get(0)[1]})); 
+        for(int i = 1 ; i < list.size() ; i++){
+            int[] next = list.get(i);
+            int curHeight = height - next[2];
+            int width = merge(sweepList);
+            res += width * curHeight;
+            height = next[2];
+            if(next[3] == 1){
+                sweepList.add(new int[]{next[0] , next[1]});
+            }
+            else{
+                remove(sweepList , next[0] , next[1]);
+            }
+            
+        }
+        res %= mod;
+        return (int)res;    
+    }
+
+    private int merge(List<int[]>  list){
+        if(list.size() == 0) return 0;
+        Collections.sort(list , (a , b)  -> (a[0] - b[0]));
+        long res =  0;
+        int s = list.get(0)[0] , e = list.get(0)[1];
+        for(int i = 0 ; i < list.size() ; i++){
+            if(e < list.get(i)[0]){
+                res += e - s;
+                s = list.get(i)[0];
+                e = list.get(i)[1];
+            }
+            else{
+                e = Math.max(e , list.get(i)[1]);
+            }
+        }
+        res += e - s;
+        return res;
+    }
+    private void remove(List<int[]> list , int x1 ,int x2){
+        int index = -1;
+        for(int i = 0 ; i < list.size() ; i++){
+            if(list.get(i)[0] == x1 && list.get(i)[1] == x2){
+                index = i;
+                break;
+            }
+        }
+        list.remove(index);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Solution {
     public int rectangleArea(int[][] rectangles) {

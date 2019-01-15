@@ -81,7 +81,7 @@ class Solution {
             if(n % s == 0){
                 src.add(s);
             }
-             s++;
+            s++;
         }
         List<List<Integer>> res = new ArrayList();
         if(n == 1){

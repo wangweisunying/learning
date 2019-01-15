@@ -1,14 +1,94 @@
 
-// 582. Word Break II
-// Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+// 140. Word Break II
 
-// Return all such possible sentences.
+// Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences.
+// Note:
 
-// Example
-// Gieve s = lintcode,
-// dict = ["de", "ding", "co", "code", "lint"].
+// The same word in the dictionary may be reused multiple times in the segmentation.
+// You may assume the dictionary does not contain duplicate words.
+// Example 1:
 
-// A solution is ["lint code", "lint co de"].
+// Input:
+// s = "catsanddog"
+// wordDict = ["cat", "cats", "and", "sand", "dog"]
+// Output:
+// [
+//   "cats and dog",
+//   "cat sand dog"
+// ]
+// Example 2:
+
+// Input:
+// s = "pineapplepenapple"
+// wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]
+// Output:
+// [
+//   "pine apple pen apple",
+//   "pineapple pen apple",
+//   "pine applepen apple"
+// ]
+// Explanation: Note that you are allowed to reuse a dictionary word.
+// Example 3:
+
+// Input:
+// s = "catsandog"
+// wordDict = ["cats", "dog", "sand", "and", "cat"]
+// Output:
+// []
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+         Map<String , List<String>> memo = new HashMap();
+         
+         return dfs(memo , s , new HashSet(wordDict));   
+    }
+    private List<String> dfs(Map<String , List<String>> memo , String s , Set<String> dict){
+        if(s.length() == 0) return new ArrayList();
+        if(memo.containsKey(s))return memo.get(s);
+        List<String> list = new ArrayList();
+        if(dict.contains(s)) list.add(s);
+        for(int i = 1 ; i <= s.length() ; i++){
+            String prefix = s.substring(0 , i);
+            if(!dict.contains(prefix))continue;
+            List<String> restWordList = dfs(memo , s.substring(i) , dict);  
+            for(String restWord : restWordList){
+                list.add(prefix + " " + restWord);
+            } 
+        }
+        memo.put(s , list);
+        return list;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Solution {
     public List<String> wordBreak(String s, List<String> wordDict) {
         Map<String , List<String>> map = new HashMap();

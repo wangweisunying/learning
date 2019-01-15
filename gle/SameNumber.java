@@ -19,7 +19,7 @@ public class Solution {
      */
     public String sameNumber(int[] nums, int k) {
         HashMap<Integer , Integer> map = new HashMap();
-        for(int i = 0 ; i < nums.length ; i ++){
+        for(int i = 0 ; i < nums.length ; i++){
             if(map.keySet().contains(nums[i])){
                 if(i - map.get(nums[i]) < k){
                     return "YES";

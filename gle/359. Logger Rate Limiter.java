@@ -30,6 +30,68 @@
 // // logging string "foo" at timestamp 11
 // logger.shouldPrintMessage(11,"foo"); returns true;
 
+
+
+/**
+ * Your Logger object will be instantiated and called as such:
+ * Logger obj = new Logger();
+ * boolean param_1 = obj.shouldPrintMessage(timestamp,message);
+ */
+
+
+// map size will keep growing so we need a pq to get rid of the un nessary storage!
+class Logger {
+
+    /** Initialize your data structure here. */
+    class Data{
+        int timestamp;
+        String message;
+        Data(int timestamp , String message){
+            this.timestamp = timestamp;
+            this.message = message;
+        }
+    }
+
+    Queue<Data> que;
+    Map<String , Integer> map;
+    public Logger() {
+        que = new PriorityQueue<>((a , b) -> (a.timestamp - b.timestamp));
+        map = new HashMap<>();
+    }
+    
+    /** Returns true if the message should be printed in the given timestamp, otherwise returns false.
+        If this method returns false, the message will not be printed.
+        The timestamp is in seconds granularity. */
+    public boolean shouldPrintMessage(int timestamp, String message) {
+        while(!que.isEmpty() && timestamp - que.peek().timestamp >= 10){
+            map.remove(que.poll().message);
+        }
+        if(map.containsKey(message)){
+            return false;
+        }       
+        else{
+            map.put(message , timestamp);
+            que.offer(new Data(timestamp , message));
+            return true;
+        }
+        
+    }
+}
+/**
+ * Your Logger object will be instantiated and called as such:
+ * Logger obj = new Logger();
+ * boolean param_1 = obj.shouldPrintMessage(timestamp,message);
+ */
+
+
+
+
+
+
+
+
+
+// map size will keep growing so we need a pq to get rid of the un nessary storage!
 class Logger {
 
     /** Initialize your data structure here. */

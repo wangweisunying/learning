@@ -21,6 +21,14 @@
 //  Because 0 is fail for sure so when later search meet 0 we know the search will fail.
 public class Solution {
     public boolean circularArrayLoop(int[] nums) {
+        
+    }
+}
+
+
+
+public class Solution {
+    public boolean circularArrayLoop(int[] nums) {
         if(nums.length == 0) return false;
         for(int i = 0 ; i < nums.length ; i++){
             // int slow = i;

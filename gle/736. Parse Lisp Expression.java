@@ -60,6 +60,41 @@
 
 class Solution {
     public int evaluate(String expression) {
+        return eval(expression , new HashMap());
+    }
+    private int eval(String exp , Map<String , Integer> preMap){
+        if(exp.charAt(0) != '('){
+            if(Character.isDigit(exp.charAt(0)) || exp.charAt(0) == '-') return Integer.parseInt(exp);
+            return preMap.get(exp);
+        }
         
+        Map<String , Integer> map = new HashMap();
+        map.putAll(preMap);
+        List<String> tokens = parse(exp.substring(exp.charAt(1) == 'm' ? 6 : 5 , exp.length() - 1 ));
+        if(exp.charAt(1) == 'a') return eval(tokens.get(0) , map) + eval(tokens.get(1) , map);
+        else if(exp.charAt(1) == 'm') return eval(tokens.get(0) , map) * eval(tokens.get(1) , map);
+        else{
+            for(int i = 0 ; i < tokens.size() - 2 ; i += 2){
+                map.put(tokens.get(i) , eval(tokens.get(i + 1) , map));
+            }
+            return eval(tokens.get(tokens.size() - 1) , map);
+        }
+    }
+    private List<String> parse(String s){
+        List<String> res = new ArrayList();
+        StringBuilder sb = new StringBuilder();
+        int level = 0;
+        for(int i = 0 ; i < s.length() ; i++){
+            if(s.charAt(i) == '(') level++;
+            if(s.charAt(i) == ')') level--;
+            // 判断条件
+            if(level == 0 && s.charAt(i) == ' '){
+                res.add(sb.toString());
+                sb.setLength(0);
+            }
+            else sb.append(s.charAt(i));
+        }
+        if(sb.length() > 0) res.add(sb.toString());
+        return res;
     }
 }

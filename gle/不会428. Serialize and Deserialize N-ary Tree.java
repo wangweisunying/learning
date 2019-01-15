@@ -26,6 +26,99 @@
 // Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
 
 
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val,List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*///看到 des or end tree 首先想到BFS 简单！
+//思路如何design String n array
+//BFS  use 1_3,3_2,2_0,4_0,5_0,6_0 stand for the string
+class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(Node root) {
+        if(root == null) return "";
+        StringBuilder sb = new StringBuilder();
+        Queue<Node> que = new LinkedList();
+        que.offer(root);
+        while(!que.isEmpty()){
+            int size = que.size();
+            for(int i = 0 ; i < size ; i++){
+                Node cur = que.poll();
+                sb.append(cur.val + "_" + cur.children.size() + ",");
+                for(Node next : cur.children) que.offer(next);
+            }
+        }
+        sb.setLength(sb.length() - 1);
+        // System.out.println(sb.toString());
+        return sb.toString();
+        
+    }
+    class Info{
+        Node node;
+        int size;
+        Info(Node node ,int size){
+            this.node = node;
+            this.size = size;
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public Node deserialize(String data) {
+        if(data.length() == 0) return null;
+        String[] arr = data.split(",");
+        int index = 1;
+        Queue<Info> que = new LinkedList();
+        Node node = new Node(Integer.parseInt(arr[0].split("_")[0]) , new ArrayList());
+        que.offer(new Info(node, Integer.parseInt(arr[0].split("_")[1])));
+        while(!que.isEmpty()){
+            int size = que.size();
+            for(int i = 0 ; i < size ; i++){
+                Info cur = que.poll();
+                int up = index + cur.size;
+                for(; index < up ; index++){
+                    String[] next = arr[index].split("_");
+                    Node nextNode = new Node(Integer.parseInt(next[0]) , new ArrayList());
+                    cur.node.children.add(nextNode);
+         
+                    que.offer(new Info(nextNode , Integer.parseInt(next[1]))); 
+                }
+            }
+        }
+        return node;
+    }
+}
+1_3,3_2,2_0,4_0,5_0,6_0
+{"$id":"1","children":[{"$id":"2","children":[{"$id":"5","children":[],"val":5},{"$id":"6","children":[],"val":6}],"val":3},{"$id":"3","children":[],"val":2},{"$id":"4","children":[],"val":4}],"val":1}
+Output:
+{"$id":"1","children":[{"$id":"2","children":[],"val":3},{"$id":"3","children":[],"val":2},{"$id":"4","children":[],"val":4},{"$id":"5","children":[],"val":5},{"$id":"6","children":[],"val":6}],"val":1}
+Expected:
+{"$id":"1","children":[{"$id":"2","children":[{"$id":"3","children":[],"val":5},{"$id":"4","children":[],"val":6}],"val":3},{"$id":"5","children":[],"val":2},{"$id":"6","children":[],"val":4}],"val":1}
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //BFS  use 1_3,3_2,2_0,4_0,5_0,6_0 stand for the string

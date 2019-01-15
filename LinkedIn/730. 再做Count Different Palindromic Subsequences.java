@@ -27,7 +27,11 @@
 // Each character S[i] will be in the set {'a', 'b', 'c', 'd'}.
 
 //ab
-
+class Solution {
+    public int countPalindromicSubsequences(String S) {
+        
+    }
+}
 
 //palidrome 需要从后往前遍历 
 class Solution {
@@ -128,7 +132,7 @@ class Solution {
 
                         dp[i][j] = dp[i + 1][j - 1] * 2 + 2;  
                     } 
-                    else if(low == high){
+                    else if(low == high){ // aaa 中 a , 加上后 aaa  , aa ,a , a和a重复了 所以是+1；
                         // consider the string from i to j is "a...a...a" where there is only one character 'a' inside the leftmost and rightmost 'a'
                        /* eg:  "aaa" while i = 0 and j = 2: the dp[i + 1][j - 1] records the palindrome {"a"}.  
                          the reason why dp[i + 1][j  - 1] * 2 counted is that we count dp[i + 1][j - 1] one time as {"a"}, 
@@ -144,7 +148,7 @@ class Solution {
                           and additional time as {"aaa",  "aca", "aaaa", "aacaa"}.  Now there is duplicate :  {"aca"}, 
                           which is removed by deduce dp[low + 1][high - 1]. So totally dp[i][j] record {"a",  "c", "aa", "aca", "aaa", "aaaa", "aacaa"}
                           */
-                        dp[i][j] = dp[i + 1][j - 1] * 2 - dp[low + 1][high - 1]; 
+                        dp[i][j] = dp[i + 1][j - 1] * 2 - dp[low + 1][high - 1];  // a...a..a....a  中间的部分需要计算2次！
                     }
                 }
                 else{
