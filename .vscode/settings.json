@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "vector": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "xstring": "cpp",
+        "iosfwd": "cpp",
+        "xlocale": "cpp",
+        "xiosbase": "cpp"
+    }
+}

@@ -10,7 +10,7 @@ class Solution {
             for(int j = 0 ; j < 9 ; j++){
                 if(board[i][j] != '.'){
                     int val = board[i][j] - '1';
-                    //注意|
+                   
                     rowVisited[i] |= 1 << val;
                     colVisited[j] |= 1 << val;
                     areaVisited[(i / 3) * 3 + j / 3] |= 1 << val;
